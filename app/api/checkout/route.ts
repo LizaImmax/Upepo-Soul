@@ -81,7 +81,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // @ts-expect-error - Stripe types mismatch
     const checkoutSession = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: lineItems,
