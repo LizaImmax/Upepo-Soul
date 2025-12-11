@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
@@ -13,8 +13,9 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { id } = await params;
     const soulNote = await prisma.soulNote.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         author: {
           select: {
@@ -42,7 +43,7 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
@@ -51,12 +52,13 @@ export async function PUT(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { id } = await params;
     const body = await req.json();
     const { title, slug, excerpt, content, coverImage, theme, tags, published, featured } = body;
 
     // Check if soul note exists
     const existing = await prisma.soulNote.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!existing) {
@@ -79,7 +81,7 @@ export async function PUT(
 
     // Update soul note
     const soulNote = await prisma.soulNote.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title,
         slug,
