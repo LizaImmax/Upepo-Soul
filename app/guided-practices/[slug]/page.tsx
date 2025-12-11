@@ -7,9 +7,9 @@ import VideoPlayer from '@/components/soul/VideoPlayer';
 import CommentSection from '@/components/soul/CommentSection';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 async function getPractice(slug: string) {
@@ -25,7 +25,8 @@ async function getPractice(slug: string) {
 }
 
 export default async function PracticeDetailPage({ params }: PageProps) {
-  const practice = await getPractice(params.slug);
+  const { slug } = await params;
+  const practice = await getPractice(slug);
 
   if (!practice) {
     notFound();

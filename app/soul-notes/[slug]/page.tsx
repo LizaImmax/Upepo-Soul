@@ -9,9 +9,9 @@ function formatDate(date: Date): string {
 }
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 async function getSoulNote(slug: string) {
@@ -94,7 +94,8 @@ Your soul already knows the way. Trust it.
 };
 
 export default async function SoulNotePage({ params }: PageProps) {
-  const note = await getSoulNote(params.slug);
+  const { slug } = await params;
+  const note = await getSoulNote(slug);
 
   if (!note) {
     notFound();
