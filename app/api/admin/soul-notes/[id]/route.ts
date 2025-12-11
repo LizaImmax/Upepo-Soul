@@ -107,7 +107,7 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
@@ -116,9 +116,10 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { id } = await params;
     // Check if soul note exists
     const existing = await prisma.soulNote.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!existing) {
@@ -127,7 +128,7 @@ export async function DELETE(
 
     // Delete soul note (comments will cascade delete due to onDelete: Cascade)
     await prisma.soulNote.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ message: 'Soul note deleted successfully' });

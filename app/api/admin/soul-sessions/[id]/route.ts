@@ -37,7 +37,7 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
@@ -46,6 +46,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { id } = await params;
     const body = await req.json();
     const {
       title,
@@ -58,7 +59,7 @@ export async function PUT(
     } = body;
 
     const existing = await prisma.soulSession.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!existing) {
@@ -100,7 +101,7 @@ export async function DELETE(
     }
 
     const { id } = await params;
-    await prisma.soulSession.delete({
+    const existing = await prisma.soulSession.findUnique({
       where: { id },
     });
 
@@ -109,7 +110,7 @@ export async function DELETE(
     }
 
     await prisma.soulSession.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ message: 'Soul session deleted successfully' });
