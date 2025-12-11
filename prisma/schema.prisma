@@ -1,0 +1,249 @@
+// Upepo Soul Database Schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// Authentication & Users
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          UserRole  @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+  soulNotes     SoulNote[]
+  practices     Practice[]
+  bookings      Booking[]
+  comments      Comment[]
+  forumPosts    ForumPost[]
+  newsletter    Newsletter?
+  purchases     Purchase[]
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+// Soul Notes (Blog Posts)
+model SoulNote {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String
+  excerpt     String?
+  coverImage  String?
+  published   Boolean  @default(false)
+  featured    Boolean  @default(false)
+  theme       String?
+  tags        String   @default("")
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+  comments    Comment[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Guided Practices (Audio/Video content)
+model Practice {
+  id          String        @id @default(cuid())
+  title       String
+  slug        String        @unique
+  description String
+  type        PracticeType
+  duration    Int
+  audioUrl    String?
+  videoUrl    String?
+  coverImage  String?
+  isPremium   Boolean       @default(false)
+  price       Float?
+  theme       String?
+  tags        String        @default("")
+  authorId    String
+  author      User          @relation(fields: [authorId], references: [id])
+  published   Boolean       @default(false)
+  featured    Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+enum PracticeType {
+  BREATHWORK
+  MEDITATION
+  VISUALIZATION
+  REFLECTION
+  HEALING
+}
+
+// Soul Sessions (Bookable events)
+model SoulSession {
+  id          String    @id @default(cuid())
+  title       String
+  description String
+  type        SessionType
+  duration    Int
+  price       Float
+  capacity    Int
+  isRecurring Boolean   @default(false)
+  bookings    Booking[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Booking {
+  id            String      @id @default(cuid())
+  sessionId     String
+  session       SoulSession @relation(fields: [sessionId], references: [id])
+  userId        String
+  user          User        @relation(fields: [userId], references: [id])
+  scheduledAt   DateTime
+  status        BookingStatus @default(PENDING)
+  paymentStatus PaymentStatus @default(PENDING)
+  notes         String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+enum SessionType {
+  LIVE_MEDITATION
+  HEALING_CIRCLE
+  ABUNDANCE_SESSION
+  REFLECTION_ROOM
+  ONE_ON_ONE
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  REFUNDED
+}
+
+// Community Features
+model Comment {
+  id          String   @id @default(cuid())
+  content     String
+  soulNoteId  String
+  soulNote    SoulNote @relation(fields: [soulNoteId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ForumPost {
+  id          String   @id @default(cuid())
+  title       String
+  content     String
+  category    String
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  replies     Reply[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Reply {
+  id          String    @id @default(cuid())
+  content     String
+  forumPostId String
+  forumPost   ForumPost @relation(fields: [forumPostId], references: [id], onDelete: Cascade)
+  userId      String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// Newsletter
+model Newsletter {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  subscribed  Boolean  @default(true)
+  userId      String?  @unique
+  user        User?    @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// E-commerce
+model Purchase {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  itemType    String
+  itemId      String
+  amount      Float
+  status      String
+  stripeId    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Soul Challenges
+model Challenge {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  duration    Int
+  startDate   DateTime
+  endDate     DateTime
+  tasks       String   @default("")
+  coverImage  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

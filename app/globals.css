@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  
+  /* Upepo Soul Sacred Color Palette */
+  --color-gold-50: #fefaf0;
+  --color-gold-100: #fef5dc;
+  --color-gold-200: #fdeab8;
+  --color-gold-300: #f5dd94;
+  --color-gold-400: #e9d07a;
+  --color-gold-500: #D9B24C;
+  --color-gold-600: #E2C675;
+  --color-gold-700: #c9a33e;
+  --color-gold-800: #a68632;
+  --color-gold-900: #876c28;
+  
+  --color-orchid-50: #f9f5fd;
+  --color-orchid-100: #f2e9fb;
+  --color-orchid-200: #e8d9f7;
+  --color-orchid-300: #d6bef2;
+  --color-orchid-400: #c4a4eb;
+  --color-orchid-500: #B78CE2;
+  --color-orchid-600: #a374d9;
+  --color-orchid-700: #8d5dc9;
+  --color-orchid-800: #7449b0;
+  --color-orchid-900: #5d3a8f;
+  
+  --color-lotus-50: #fdf8f9;
+  --color-lotus-100: #fbf0f3;
+  --color-lotus-200: #f8e3e9;
+  --color-lotus-300: #f3d1dc;
+  --color-lotus-400: #edb9c9;
+  --color-lotus-500: #E7C1CC;
+  --color-lotus-600: #dda3b3;
+  --color-lotus-700: #c9859a;
+  --color-lotus-800: #b06880;
+  --color-lotus-900: #8f5467;
+  
+  --color-sand-50: #faf8f5;
+  --color-sand-100: #f5f1ea;
+  --color-sand-200: #ebe4d5;
+  --color-sand-300: #E8DCC5;
+  --color-sand-400: #d9c9a8;
+  --color-sand-500: #c9b68b;
+  --color-sand-600: #b09870;
+  --color-sand-700: #8f7a58;
+  --color-sand-800: #6e5e43;
+  --color-sand-900: #4d4330;
+  
+  --color-moonlit-50: #F7F7FB;
+  --color-moonlit-100: #f0f0f7;
+  --color-moonlit-200: #e3e3ed;
+  --color-moonlit-300: #d1d1de;
+  --color-moonlit-400: #b8b8cc;
+  --color-moonlit-500: #9f9fba;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
