@@ -81,12 +81,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3001';
+    
     const checkoutSession = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
-      success_url: `${process.env.NEXTAUTH_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXTAUTH_URL}/checkout/cancel`,
+      success_url: `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/checkout/cancel`,
       client_reference_id: session.user!.id!,
       metadata: {
         type,

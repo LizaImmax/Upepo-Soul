@@ -65,7 +65,8 @@ export const sendBookingConfirmation = async (
 };
 
 export const sendPasswordResetEmail = async (to: string, resetToken: string) => {
-  const resetUrl = `${process.env.NEXTAUTH_URL}/auth/reset-password?token=${resetToken}`;
+  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3001';
+  const resetUrl = `${baseUrl}/auth/reset-password?token=${resetToken}`;
   
   try {
     await resend.emails.send({
