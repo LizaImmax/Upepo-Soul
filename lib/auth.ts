@@ -5,6 +5,7 @@ import { compare } from 'bcryptjs';
 import prisma from './prisma';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  secret: process.env.NEXTAUTH_SECRET || 'dummy-secret-for-build',
   adapter: PrismaAdapter(prisma),
   session: { strategy: 'jwt' },
   pages: {
