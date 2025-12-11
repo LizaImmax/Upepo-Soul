@@ -1,10 +1,9 @@
 import { Resend } from 'resend';
 
-if (!process.env.RESEND_API_KEY) {
-  throw new Error('RESEND_API_KEY is not set');
-}
+// Allow build without RESEND_API_KEY - will fail at runtime if emails are sent
+const apiKey = process.env.RESEND_API_KEY || 're_dummy_key_for_build';
 
-export const resend = new Resend(process.env.RESEND_API_KEY);
+export const resend = new Resend(apiKey);
 
 export const sendWelcomeEmail = async (to: string, name: string) => {
   try {
