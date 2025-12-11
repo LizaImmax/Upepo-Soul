@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { Play, Pause, Volume2, VolumeX, Maximize, Minimize } from 'lucide-react';
 
@@ -83,24 +83,24 @@ export default function VideoPlayer({ url, title, autoPlay = false }: VideoPlaye
 
       {/* Video Player */}
       <div className="relative aspect-video">
-        <ReactPlayer
-          ref={playerRef}
-          url={url}
-          playing={playing}
-          volume={volume}
-          muted={muted}
-          onProgress={handleProgress as any}
-          onDuration={handleDuration}
-          width="100%"
-          height="100%"
-          config={{
+        {React.createElement(ReactPlayer as any, {
+          ref: playerRef,
+          url: url,
+          playing: playing,
+          volume: volume,
+          muted: muted,
+          onProgress: handleProgress as any,
+          onDuration: handleDuration,
+          width: "100%",
+          height: "100%",
+          config: {
             file: {
               attributes: {
                 controlsList: 'nodownload',
               },
             },
-          } as any}
-        />
+          }
+        })}
 
         {/* Play/Pause Overlay */}
         {!playing && (

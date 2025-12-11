@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX } from 'lucide-react';
 
@@ -75,17 +75,17 @@ export default function AudioPlayer({ url, title, autoPlay = false }: AudioPlaye
 
       {/* Hidden ReactPlayer */}
       <div className="hidden">
-        <ReactPlayer
-          ref={playerRef}
-          url={url}
-          playing={playing}
-          volume={volume}
-          muted={muted}
-          onProgress={handleProgress as any}
-          onDuration={handleDuration}
-          width="0"
-          height="0"
-        />
+        {React.createElement(ReactPlayer as any, {
+          ref: playerRef,
+          url: url,
+          playing: playing,
+          volume: volume,
+          muted: muted,
+          onProgress: handleProgress as any,
+          onDuration: handleDuration,
+          width: "0",
+          height: "0"
+        })}
       </div>
 
       {/* Progress Bar */}
