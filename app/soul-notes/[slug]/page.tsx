@@ -167,7 +167,7 @@ export default async function SoulNotePage({ params }: PageProps) {
         {/* Content */}
         <div className="prose prose-lg max-w-none">
           <div className="text-gray-700 leading-relaxed space-y-6 text-lg">
-            {note.content.split('\n').map((paragraph, index) => {
+            {note.content.split('\n').map((paragraph: string, index: number) => {
               if (paragraph.trim() === '') return null;
               if (paragraph.startsWith('## ')) {
                 return (
