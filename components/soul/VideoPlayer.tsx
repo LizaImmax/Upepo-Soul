@@ -83,7 +83,6 @@ export default function VideoPlayer({ url, title, autoPlay = false }: VideoPlaye
 
       {/* Video Player */}
       <div className="relative aspect-video">
-        {/* @ts-expect-error - ReactPlayer types mismatch */}
         <ReactPlayer
           ref={playerRef}
           url={url}

@@ -75,7 +75,6 @@ export default function AudioPlayer({ url, title, autoPlay = false }: AudioPlaye
 
       {/* Hidden ReactPlayer */}
       <div className="hidden">
-        {/* @ts-expect-error - ReactPlayer types mismatch */}
         <ReactPlayer
           ref={playerRef}
           url={url}
